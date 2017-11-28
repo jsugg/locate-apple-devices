@@ -1,1 +1,1 @@
-web: python handy_tools_apple_devices.py
+web: ./docker/start_web.sh
