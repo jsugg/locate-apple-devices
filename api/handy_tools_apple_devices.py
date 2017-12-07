@@ -22,21 +22,31 @@ apple_devices_handy_tools = Flask(__name__)
 api = Api(apple_devices_handy_tools)
 
 class PlaySound(Resource):
-  def get(self, device_id):
+  def post(self):
+    if not 'device_id' in request.form:
+      return "Missing device id", 400
+
+    device_id = request.form['device_id']
     icloud_api = PyiCloudService(user, password)
     icloud_api.devices[device_id].play_sound()
-    return "Beeping " + urllib.unquote(device_id)
+    return "Beeping " + device_id, 200
 
 class SendMessage(Resource):
-  def get(self, subject, message, sounds, device_id):
-    if sounds != "True":
-      sounds = "False"
-    icloud_api = PyiCloudService(user, password)
-    icloud_api.devices[device_id].display_message(subject, message, sounds)
-    return "Message sent!"
+  def post(self):
+    subject = request.form['title'] if 'title' in request.form else 'Subject'
+    message = request.form['message'] if 'message' in request.form else 'Message'
+    beep = request.form['beep'] if 'beep' in request.form else False
+    device_id = request.form['device_id'] if 'device_id' in request.form else False
 
-api.add_resource(PlaySound, '/play_sound/<path:device_id>')
-api.add_resource(SendMessage, '/send_message/<string:subject>/<string:message>/<string:sounds>/<path:device_id>')
+    if not device_id:
+      return 'Missing device id', 400
+    
+    icloud_api = PyiCloudService(user, password)
+    icloud_api.devices[device_id].display_message(subject, message, beep)
+    return 'Message sent to device id: ' + device_id, 200
+
+api.add_resource(PlaySound, '/play_sound/')
+api.add_resource(SendMessage, '/send_message/')
 
 if __name__ == '__main__':
   apple_devices_handy_tools.run(debug=False, host='0.0.0.0', port=3010)
