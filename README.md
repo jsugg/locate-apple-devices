@@ -1,4 +1,4 @@
-# Handy tool to help you locate you Apple devices
+# Handy tool to help you locate your Apple devices
 A very simple API that makes it easy to locate a device. The idea behind it, is to avoid wasting time by walking around the office asking everyone for the device. Especially useful, when working at a company that develops for mobile, and share MANY devices amongst developers.
 
 The API is Dockerized and ready to go.
