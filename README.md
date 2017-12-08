@@ -1,58 +1,67 @@
-# Handy Tool to help you locate Apple Devices
-
-A very simple API that makes it easier to locate a device. The idea behid it, is to avoid wasting time walking around the office asking everyone for the device. Something extremely useful, when working at a company that develops for mobile, and share MANY devices amongst developers.
+# Handy tool to help you locate you Apple devices
+A very simple API that makes it easy to locate a device. The idea behind it, is to avoid wasting time by walking around the office asking everyone for the device. Especially useful, when working at a company that develops for mobile, and share MANY devices amongst developers.
 
 The API is Dockerized and ready to go.
 
 ## Features
 * Send messages.
 * Plays sounds.
-* Utilizes oauth2_proxy for google account authentication (you can change it to whatever you want).
+* It uses [oauth2_proxy](https://github.com/bitly/oauth2_proxy) for Google account authentication (you can change it to whatever you use), Nginx as reverse proxy, and the [PyiCloud](https://github.com/picklepete/pyicloud) CLI.
+
+The flow goes like this:
+Your API request -> Nginx -> oauth2_proxy -> Nginx -> Application Server (gunicorn) -> Python API (Flask)
 
 ## Configuration
-Create a `.env` file with:
+iCloud account credentials, allowed Google account domains (as much as you want), and Google API details, are environment variables: 
 
-iCloud account's credentials are environment variables: 
+Create a `.env` file with:
 ```
 PORT=80
-ALLOWED_DOMAINS=[\"<yourdomain.com>\",\"<if-you-have-a-seccond-domain.com>\"]
+ALLOWED_DOMAINS=[\"<yourdomain.com>\",\"<if-you-have-a-second-domain.com>\"]
 APPLE_DEVICES_ACCOUNT_USER=your@email.com
 APPLE_DEVICES_ACCOUNT_PASSWORD=your_password
-OAUTH2_PROXY_CLIENT_ID=<google's api client id>
-OAUTH2_PROXY_CLIENT_SECRET=<google api's clien secret>
+OAUTH2_PROXY_CLIENT_ID=<google api client id>
+OAUTH2_PROXY_CLIENT_SECRET=<google api client secret>
 OAUTH2_PROXY_COOKIE_SECRET=<a random secret string here>
 OAUTH2_PROXY_COOKIE_DOMAIN=.<your domain>
 OAUTH2_PROXY_REDIRECT_URL=<your callback url>
 ```
 
-The last two lines, in a development environment, could be something like:
+For the last two lines, you could use something like this in a development environment:
 ```
 OAUTH2_PROXY_COOKIE_DOMAIN=.nip.io
 OAUTH2_PROXY_REDIRECT_URL=http://127.0.0.1.nip.io:8080/oauth2/callback
 ```
 
-For the API credentials, just go to [Google developers console](https://console.developers.google.com/apis/) and create credentials. Then, just copy/paste them in your .env file.
+For the Google API credentials, just go to [Google developers console](https://console.developers.google.com/apis/) and create the credentials. Then, just copy/paste them into your .env file.
 ```
 OAUTH2_PROXY_CLIENT_ID
 OAUTH2_PROXY_CLIENT_SECRET
 ```
 
-To start it locally:
+To run it locally:
 `docker run -i -p 8080:80 --env-file .env apple-devices-locator`
 
-To deploy to production, it'll depend on how you're gonna do that (deis, heroku, ...).
+You can reach the API in the port 8080. Remember that you must be logged into a google account, from one of the allowed domains. If you're not logged in, it'll ask you to loggin.
 
-You can reach your API in the port 8080. Remember that you must be logged into a google account, from the allowed domains list. If you're not, it'll reject the request.
+To move to production, it'll depend on how you're gonna do that (Kubernetes, Heroku, etc, ...).
+Using deis, it should be as simple as this:
+```
+deis config:push
+git push deis master
+```
 
 ## Play sound
-POST request. form-data
+POST request (form-data)
 ```
 device_id=<device id from you apple device>
 ```
 [https://imgur.com/a/jGChT](https://imgur.com/a/jGChT)
 
+Note: it's the device id, NOT the device udid
+
 ## Send Message
-POST request. form-data
+POST request (form-data)
 ```
 device_id=<device id from you apple device>
 title=<the title of your message>
