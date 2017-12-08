@@ -2,6 +2,7 @@
 .env
 .env-prod
 .env-dev
+.env-stag
 .flaskenv
 *.pyc
 *.pyo

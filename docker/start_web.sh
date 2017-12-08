@@ -5,6 +5,7 @@ cat ./docker/nginx.apple-devices-locator.conf > /etc/nginx/conf.d/default.conf
 
 echo configuring oauth2_proxy
 cat ./docker/oauth2_proxy.config > /etc/oauth2_proxy.config
+sed -i -e "s/{{ALLOWED_DOMAINS}}/$ALLOWED_DOMAINS/g" /etc/oauth2_proxy.config
 sed -i -e "s/{{OAUTH2_PROXY_CLIENT_ID}}/$OAUTH2_PROXY_CLIENT_ID/g" /etc/oauth2_proxy.config
 sed -i -e "s/{{OAUTH2_PROXY_CLIENT_SECRET}}/$OAUTH2_PROXY_CLIENT_SECRET/g" /etc/oauth2_proxy.config
 sed -i -e "s/{{OAUTH2_PROXY_COOKIE_SECRET}}/$OAUTH2_PROXY_COOKIE_SECRET/g" /etc/oauth2_proxy.config
