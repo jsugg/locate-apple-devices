@@ -49,7 +49,7 @@ POST request. form-data
 ```
 device_id=<device id from you apple device>
 ```
-![Beeping a device](https://imgur.com/a/jGChT)
+[https://imgur.com/a/jGChT](https://imgur.com/a/jGChT)
 
 ## Send Message
 POST request. form-data
@@ -61,7 +61,7 @@ beep=<True/False>
 ```
 If `beep=True` the device will make some LOUD noise until someone touches the home button.
 
-![Sending a message to a device](https://imgur.com/a/jaJSK)
+[https://imgur.com/a/jaJSK](https://imgur.com/a/jaJSK)
 
 ## Contributions
 For now, I think this is what we need. Any contributions are welcome!
