@@ -24,12 +24,15 @@ api = Api(apple_devices_handy_tools)
 class PlaySound(Resource):
   def post(self):
     if not 'device_id' in request.form:
-      return "Missing device id", 400
+      return "Missing device id.", 400
 
     device_id = request.form['device_id']
-    icloud_api = PyiCloudService(user, password)
-    icloud_api.devices[device_id].play_sound()
-    return "Beeping " + device_id, 200
+    try:
+      icloud_api = PyiCloudService(user, password)
+      icloud_api.devices[device_id].play_sound()
+      return "Beeping " + device_id, 200
+    except:
+      return 'Could not send the beep.', 400
 
 class SendMessage(Resource):
   def post(self):
@@ -39,11 +42,14 @@ class SendMessage(Resource):
     device_id = request.form['device_id'] if 'device_id' in request.form else False
 
     if not device_id:
-      return 'Missing device id', 400
+      return 'Missing device id.', 400
     
-    icloud_api = PyiCloudService(user, password)
-    icloud_api.devices[device_id].display_message(subject, message, beep)
-    return 'Message sent to device id: ' + device_id, 200
+    try:
+      icloud_api = PyiCloudService(user, password)
+      icloud_api.devices[device_id].display_message(subject, message, beep)
+      return 'Message sent to device id: ' + device_id, 200
+    except:
+      return 'Could not send the message.', 400
 
 api.add_resource(PlaySound, '/play_sound/')
 api.add_resource(SendMessage, '/send_message/')
