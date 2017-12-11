@@ -51,8 +51,8 @@ class SendMessage(Resource):
     except:
       return 'Could not send the message.', 400
 
-api.add_resource(PlaySound, '/play_sound/')
-api.add_resource(SendMessage, '/send_message/')
+api.add_resource(PlaySound, '/beeps/')
+api.add_resource(SendMessage, '/messages/')
 
 if __name__ == '__main__':
   apple_devices_handy_tools.run(debug=False, host='0.0.0.0', port=3010)
