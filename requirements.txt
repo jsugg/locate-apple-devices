@@ -27,7 +27,7 @@ pyicloud==0.9.1
 pyOpenSSL==17.3.0
 python-dateutil==2.6.1
 pytz==2017.3
-requests==2.18.4
+requests==2.20.0
 six==1.11.0
 tzlocal==1.4
 Werkzeug==0.15.3
